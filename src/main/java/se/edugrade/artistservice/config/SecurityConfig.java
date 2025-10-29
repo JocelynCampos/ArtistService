@@ -2,6 +2,7 @@ package se.edugrade.artistservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -17,15 +18,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .headers(h-> h.frameOptions(f -> f.sameOrigin()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/test").permitAll()
-                        .requestMatchers("/get-artists/**",
-                                "/art-album/**",
-                                "/art-media/**").hasAnyRole("USER", "ADMIN")
 
-                        .requestMatchers("/add-artist",
-                                "/upd-artist/**",
-                                "/rem-artist/**").hasRole("ADMIN")
+                        .requestMatchers("/edufy/v1/artist/test", "/h2-console/**").permitAll()
+                        .requestMatchers("/edufy/v1/artist/get-artists/**",
+                                "/edufy/v1/artistart-album/**",
+                                "/edufy/v1/artist/art-media/**").hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/edufy/v1/artist/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,  "/edufy/v1/artist/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/edufy/v1/artist/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
@@ -44,14 +47,16 @@ public class SecurityConfig {
 
         UserDetails user2 = User.withUsername("Jocelyn")
                 .password("{noop}CarrilloCampos")
+                .roles("USER")
                 .build();
 
         UserDetails user3 = User.withUsername("Mohamed")
                 .password("{noop}Sharshar")
+                .roles("USER")
                 .build();
 
         UserDetails admin = User.withUsername("Hugo")
-                .password("[noop}Ransvi")
+                .password("{noop}Ransvi")
                 .roles("ADMIN")
                 .build();
 

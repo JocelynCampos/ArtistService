@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerController {
 
     /**
-    @GetMapping("/get-artist/{id}") //Få en specifik artist
+    @GetMapping("/{id}") //Få en specifik artist
 
     @GetMapping("/art-album/{id}") //Får en specifik artists alla album
 
