@@ -7,6 +7,8 @@ import se.edugrade.artistservice.dto.ArtistResponseDTO;
 import se.edugrade.artistservice.entities.Artist;
 import se.edugrade.artistservice.repositories.ArtistRepository;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class ArtistService {
@@ -16,10 +18,20 @@ public class ArtistService {
         this.artistRepository = artistRepository;
     }
 
+
+    @Transactional(readOnly = true)
+    public List<ArtistResponseDTO> findAll() {
+        return artistRepository.findAll().stream()
+                .map(artist -> new ArtistResponseDTO(artist.getId(), artist.getArtistName()))
+                .toList();
+    }
+
     public ArtistResponseDTO addArtist(ArtistRequestDTO rq) {
         Artist artist = new Artist();
         artist.setArtistName(rq.name().trim());
         artist = artistRepository.save(artist);
         return new ArtistResponseDTO(artist.getId(), artist.getArtistName());
     }
+
+
 }
