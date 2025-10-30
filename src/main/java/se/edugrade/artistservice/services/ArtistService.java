@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import se.edugrade.artistservice.dto.ArtistRequestDTO;
 import se.edugrade.artistservice.dto.ArtistResponseDTO;
 import se.edugrade.artistservice.entities.Artist;
+import se.edugrade.artistservice.exceptions.DuplicateArtistException;
 import se.edugrade.artistservice.repositories.ArtistRepository;
 
 import java.util.List;
@@ -27,8 +28,15 @@ public class ArtistService {
     }
 
     public ArtistResponseDTO addArtist(ArtistRequestDTO rq) {
-        Artist artist = new Artist();
-        artist.setArtistName(rq.name().trim());
+        var name = rq.name().trim();
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty");
+        }
+        if (artistRepository.existsByName(name)) {
+            throw new DuplicateArtistException("Artist with name " + name + " already exists");
+        }
+        var artist = new Artist();
+        artist.setArtistName(name);
         artist = artistRepository.save(artist);
         return new ArtistResponseDTO(artist.getId(), artist.getArtistName());
     }

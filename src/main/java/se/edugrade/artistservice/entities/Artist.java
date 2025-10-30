@@ -10,7 +10,7 @@ public class Artist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "artists_name",length = 100, unique = true)
+    @Column(name = "artists_name", length = 100, unique = true, nullable = false)
     private String artistName;
 
 
