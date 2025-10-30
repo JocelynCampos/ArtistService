@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class ArtistService {
+public class ArtistService implements ArtistServiceInterface {
 
     private final ArtistRepository artistRepository;
     public ArtistService(ArtistRepository artistRepository) {
@@ -20,6 +20,7 @@ public class ArtistService {
     }
 
 
+    @Override
     @Transactional(readOnly = true)
     public List<ArtistResponseDTO> findAll() {
         return artistRepository.findAll().stream()
@@ -27,12 +28,18 @@ public class ArtistService {
                 .toList();
     }
 
+    @Override
+    public ArtistResponseDTO findById(Long id) {
+        return null;
+    }
+
+    @Override
     public ArtistResponseDTO addArtist(ArtistRequestDTO rq) {
         var name = rq.name().trim();
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be empty");
         }
-        if (artistRepository.existsByName(name)) {
+        if (artistRepository.existsByArtistName(name)) {
             throw new DuplicateArtistException("Artist with name " + name + " already exists");
         }
         var artist = new Artist();
@@ -40,6 +47,18 @@ public class ArtistService {
         artist = artistRepository.save(artist);
         return new ArtistResponseDTO(artist.getId(), artist.getArtistName());
     }
+
+    @Override
+    public ArtistResponseDTO updateArtist(Long id, ArtistRequestDTO rq) {
+        return null;
+    }
+
+    @Override
+    public void deleteArtist(Long id) {
+
+    }
+
+
 
 
 }

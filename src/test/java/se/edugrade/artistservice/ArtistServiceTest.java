@@ -25,7 +25,7 @@ class ArtistServiceTest {
 
     @Test
     void addArtist_throwsDuplicate_IfNameAlreadyExists() throws Exception {
-        when(repo.existsByName("Adele")).thenReturn(true);
+        when(repo.existsByArtistName("Adele")).thenReturn(true);
         assertThrows(DuplicateArtistException.class, () -> service.addArtist(new ArtistRequestDTO("Adele")));
         verify(repo, never()).save(any());
 
