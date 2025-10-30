@@ -21,7 +21,10 @@ public class SecurityConfig {
                 .headers(h-> h.frameOptions(f -> f.sameOrigin()))
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/edufy/v1/artist/test", "/h2-console/**").permitAll()
+                        .requestMatchers("/edufy/v1/artist/test",
+                                "/h2-console/**",
+                                "/edufy/v1/artist/all").permitAll()
+
                         .requestMatchers("/edufy/v1/artist/get-artists/**",
                                 "/edufy/v1/artistart-album/**",
                                 "/edufy/v1/artist/art-media/**").hasAnyRole("USER", "ADMIN")
