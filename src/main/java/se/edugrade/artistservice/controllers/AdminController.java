@@ -24,16 +24,17 @@ public class AdminController {
         return ResponseEntity.ok(created);
     }
 
-
-
-/**
      @PutMapping("/update/{id}") //Uppdatera en specifik artist
+    public ResponseEntity<ArtistResponseDTO> updateArtist(@PathVariable Long id, @RequestBody ArtistRequestDTO req) {
+        ArtistResponseDTO updated = artistService.updateArtist(id, req);
+        return ResponseEntity.ok(updated);
+     }
 
-
-
-     @DeleteMapping("/rem-artist/{id}") //Ta bort en specifik artist
-
-**/
+     @DeleteMapping("/remove/{id}")
+    public ResponseEntity<Void>removeArtist(@PathVariable Long id) {
+        artistService.deleteArtist(id);
+        return ResponseEntity.noContent().build();
+     }
 
 }
 

@@ -11,14 +11,14 @@ public class Artist {
     private Long id;
 
     @Column(name = "artists_name", length = 100, unique = true, nullable = false)
-    private String artistName;
+    private String name;
 
 
     public Artist() {}
 
     public Artist(Long id, String name) {
         this.id = id;
-        this.artistName = name;
+        this.name = name;
     }
 
     public Long getId() {
@@ -29,11 +29,11 @@ public class Artist {
         this.id = id;
     }
 
-    public String getArtistName() {
-        return artistName;
+    public String getName() {
+        return name;
     }
 
-    public void setArtistName(String artistName) {
-        this.artistName = artistName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -6,6 +6,6 @@ import se.edugrade.artistservice.entities.Artist;
 import java.util.Optional;
 
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
-    boolean existsByArtistName(String artistName);
-    Optional<Artist> findByArtistName(String artistName);
+    boolean existsByName(String name);
+    Optional<Artist> findByName(String name);
 }
