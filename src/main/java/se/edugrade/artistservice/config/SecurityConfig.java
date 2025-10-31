@@ -25,10 +25,10 @@ public class SecurityConfig {
                                 "/h2-console/**",
                                 "/edufy/v1/artist/all").permitAll()
 
-                        .requestMatchers("/edufy/v1/artist/get-artists/**",
-                                "/edufy/v1/artistart-album/**",
-                                "/edufy/v1/artist/art-media/**").hasAnyRole("USER", "ADMIN")
 
+                        .requestMatchers(HttpMethod.GET, "/edufy/v1/artist/albums").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET,  "/edufy/v1/artist/media").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET,"/edufy/v1/artist/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/edufy/v1/artist/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,  "/edufy/v1/artist/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/edufy/v1/artist/**").hasRole("ADMIN")

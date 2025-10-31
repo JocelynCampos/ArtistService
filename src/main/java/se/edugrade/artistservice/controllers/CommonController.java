@@ -23,4 +23,6 @@ public class CommonController {
     public ResponseEntity <List<ArtistResponseDTO>> findAll() {
         return ResponseEntity.ok(artistService.findAll());
     }
+
+    //@GetMapping("/{id}") //Få en specifik artist
 }
