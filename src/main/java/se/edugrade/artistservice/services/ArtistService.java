@@ -25,18 +25,43 @@ public class ArtistService implements ArtistServiceInterface {
     }
 
 
+    /********Common******/
+
     @Override
     @Transactional(readOnly = true)
     public List<ArtistResponseDTO> findAll() {
-        return artistRepository.findAll().stream()
+        List<Artist> artists = artistRepository.findAll();
+
+        if (artists.isEmpty()) {
+            logger.warning("No artists found or list empty");
+            return List.of();
+        }
+        return artists.stream()
                 .map(artist -> new ArtistResponseDTO(artist.getId(), artist.getName()))
                 .toList();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ArtistResponseDTO findById(Long id) {
-        return null;
+        if (id == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id is required");
+        }
+        return artistRepository.findById(id)
+                .map(artist -> new ArtistResponseDTO(artist.getId(), artist.getName()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+
+    /******Customer*******/
+
+
+
+
+
+
+
+    /********Admin********/
+
 
     @Override
     public ArtistResponseDTO addArtist(ArtistRequestDTO rq) {
@@ -83,8 +108,5 @@ public class ArtistService implements ArtistServiceInterface {
         artistRepository.deleteById(id);
         logger.info("Artist with id: " + id + " was deleted.");
     }
-
-
-
 
 }
