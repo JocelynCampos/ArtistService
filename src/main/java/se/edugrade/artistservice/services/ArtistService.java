@@ -1,5 +1,7 @@
 package se.edugrade.artistservice.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,13 +13,12 @@ import se.edugrade.artistservice.exceptions.DuplicateArtistException;
 import se.edugrade.artistservice.repositories.ArtistRepository;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Service
 @Transactional
 public class ArtistService implements ArtistServiceInterface {
 
-    private static final Logger logger = Logger.getLogger(ArtistService.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(ArtistService.class);
 
     private final ArtistRepository artistRepository;
     public ArtistService(ArtistRepository artistRepository) {
@@ -33,7 +34,7 @@ public class ArtistService implements ArtistServiceInterface {
         List<Artist> artists = artistRepository.findAll();
 
         if (artists.isEmpty()) {
-            logger.warning("No artists found or list empty");
+            logger.warn("No artists found or list empty");
             return List.of();
         }
         return artists.stream()
@@ -75,7 +76,7 @@ public class ArtistService implements ArtistServiceInterface {
         var artist = new Artist();
         artist.setName(name);
         artist = artistRepository.save(artist);
-        logger.info("Artist " + name + " added");
+        logger.info("Artist {} added", name);
         return new ArtistResponseDTO(artist.getId(), artist.getName());
     }
 
@@ -96,7 +97,7 @@ public class ArtistService implements ArtistServiceInterface {
 
         artist.setName(name);
         var saved = artistRepository.save(artist);
-        logger.info("Artist with id: " + id + " is updated to: " + name);
+        logger.info("Artist with id: {} is updated to: {}", id, name);
         return new ArtistResponseDTO(saved.getId(), saved.getName());
     }
 
@@ -106,7 +107,7 @@ public class ArtistService implements ArtistServiceInterface {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Artist not found with id:" + id);
         }
         artistRepository.deleteById(id);
-        logger.info("Artist with id: " + id + " was deleted.");
+        logger.info("Artist with id: {} was deleted.", id);
     }
 
 }
