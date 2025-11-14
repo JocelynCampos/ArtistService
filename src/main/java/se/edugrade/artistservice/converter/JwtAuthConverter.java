@@ -1,6 +1,5 @@
 package se.edugrade.artistservice.converter;
 
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;

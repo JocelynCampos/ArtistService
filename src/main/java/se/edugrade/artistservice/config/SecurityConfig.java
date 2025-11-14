@@ -1,24 +1,27 @@
 package se.edugrade.artistservice.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import se.edugrade.artistservice.converter.JwtAuthConverter;
 
 @Configuration
 public class SecurityConfig {
+
+    private final JwtAuthConverter jwtAuthConverter;
+
+    @Autowired
+    public SecurityConfig(JwtAuthConverter jwtAuthConverter) {
+        this.jwtAuthConverter = jwtAuthConverter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .headers(h-> h.frameOptions(f -> f.sameOrigin()))
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers("/edufy/v1/artist/test",
@@ -26,43 +29,18 @@ public class SecurityConfig {
                                 "/edufy/v1/artist/all").permitAll()
 
 
-                        .requestMatchers(HttpMethod.GET, "/edufy/v1/artist/albums").hasRole("USER")
-                        .requestMatchers(HttpMethod.GET,  "/edufy/v1/artist/media").hasRole("USER")
-                        .requestMatchers(HttpMethod.GET,"/edufy/v1/artist/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/edufy/v1/artist/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,  "/edufy/v1/artist/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/edufy/v1/artist/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/edufy/v1/artist/albums").hasRole("user")
+                        .requestMatchers(HttpMethod.GET,  "/edufy/v1/artist/media").hasRole("user")
+                        .requestMatchers(HttpMethod.GET,"/edufy/v1/artist/**").hasAnyRole("user", "admin")
+                        .requestMatchers(HttpMethod.POST, "/edufy/v1/artist/**").hasRole("admin")
+                        .requestMatchers(HttpMethod.PUT,  "/edufy/v1/artist/**").hasRole("admin")
+                        .requestMatchers(HttpMethod.DELETE,"/edufy/v1/artist/**").hasRole("admin")
 
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults());
+                .oauth2ResourceServer(auth2 -> auth2
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)));
         return http.build();
     }
 
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-
-        UserDetails user1 = User.withUsername("Erik")
-                .password("{noop}Edman")
-                .roles("USER")
-                .build();
-
-        UserDetails user2 = User.withUsername("Jocelyn")
-                .password("{noop}CarrilloCampos")
-                .roles("USER")
-                .build();
-
-        UserDetails user3 = User.withUsername("Mohamed")
-                .password("{noop}Sharshar")
-                .roles("USER")
-                .build();
-
-        UserDetails admin = User.withUsername("Hugo")
-                .password("{noop}Ransvi")
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user1, user2, user3, admin);
-    }
 }
