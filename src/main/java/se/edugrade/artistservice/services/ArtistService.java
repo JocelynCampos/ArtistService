@@ -68,7 +68,7 @@ public class ArtistService implements ArtistServiceInterface {
     public ArtistResponseDTO addArtist(ArtistRequestDTO rq) {
         var name = rq.name().trim();
         if (name.isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be empty");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name cannot be empty");
         }
         if (artistRepository.existsByName(name)) {
             throw new DuplicateArtistException("Artist with name " + name + " already exists");

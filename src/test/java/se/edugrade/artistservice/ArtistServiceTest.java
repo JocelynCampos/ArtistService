@@ -30,6 +30,7 @@ class ArtistServiceTest {
         verify(repo, never()).save(any());
     }
 
+    @Test
     void removeArtist_IfNameAlreadyExcised() throws Exception {
         when(repo.existsByName("Adele")).thenReturn(false);
         assertThrows(DuplicateArtistException.class, () -> service.deleteArtist(1L));
