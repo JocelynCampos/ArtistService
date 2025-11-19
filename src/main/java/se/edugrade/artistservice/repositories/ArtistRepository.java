@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
     boolean existsByNameIgnoreCase(String name);
-    Optional<Artist> findByName(String name);
+    Optional<Artist> findByNameIgnoreCase(String name);
 }

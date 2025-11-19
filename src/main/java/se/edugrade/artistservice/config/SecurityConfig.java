@@ -32,9 +32,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/edufy/v1/artist/albums").hasRole("user")
                         .requestMatchers(HttpMethod.GET,  "/edufy/v1/artist/media").hasRole("user")
                         .requestMatchers(HttpMethod.GET,"/edufy/v1/artist/**").hasAnyRole("user", "admin")
+                        .requestMatchers(HttpMethod.GET, "/edufy/v1/artist/by_name/**").hasAnyRole("user", "admin")
                         .requestMatchers(HttpMethod.POST, "/edufy/v1/artist/**").hasRole("admin")
                         .requestMatchers(HttpMethod.PUT,  "/edufy/v1/artist/**").hasRole("admin")
                         .requestMatchers(HttpMethod.DELETE,"/edufy/v1/artist/**").hasRole("admin")
+                        .requestMatchers(HttpMethod.POST, "/edufy/v1/artist/by_id/**").hasRole("admin")
 
                         .anyRequest().authenticated()
                 )

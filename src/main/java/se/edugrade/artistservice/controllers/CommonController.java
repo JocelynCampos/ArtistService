@@ -2,6 +2,7 @@ package se.edugrade.artistservice.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.edugrade.artistservice.dto.ArtistResponseDTO;
@@ -24,5 +25,8 @@ public class CommonController {
         return ResponseEntity.ok(artistService.findAll());
     }
 
-    //@GetMapping("/{id}") //Få en specifik artist
+    @GetMapping("/by_name/{name}")
+    public ResponseEntity<ArtistResponseDTO> findByName(@PathVariable String name) {
+        return ResponseEntity.ok(artistService.findByName(name));
+    }
 }

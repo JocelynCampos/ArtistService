@@ -36,6 +36,11 @@ public class AdminController {
         return ResponseEntity.noContent().build();
      }
 
+     @GetMapping("/by_id/{id}")
+    public ResponseEntity<ArtistResponseDTO> getArtistById(@PathVariable Long id) {
+        return ResponseEntity.ok(artistService.findById(id));
+     }
+
 }
 
 

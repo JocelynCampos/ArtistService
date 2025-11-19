@@ -21,6 +21,8 @@ public class ArtistService implements ArtistServiceInterface {
     private static final Logger logger = LoggerFactory.getLogger(ArtistService.class);
 
     private final ArtistRepository artistRepository;
+
+
     public ArtistService(ArtistRepository artistRepository) {
         this.artistRepository = artistRepository;
     }
@@ -47,6 +49,21 @@ public class ArtistService implements ArtistServiceInterface {
 
     @Override
     @Transactional(readOnly = true)
+    public ArtistResponseDTO findByName(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is required");
+        }
+        String trimmedName = name.trim();
+
+        return artistRepository.findByNameIgnoreCase(trimmedName)
+                .map(artist -> new ArtistResponseDTO(artist.getId(), artist.getName()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Artist with this name not found"));
+    }
+
+    /********Admin********/
+
+    @Override
+    @Transactional(readOnly = true)
     public ArtistResponseDTO findById(Long id) {
         if (id == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id is required");
@@ -55,14 +72,6 @@ public class ArtistService implements ArtistServiceInterface {
                 .map(artist -> new ArtistResponseDTO(artist.getId(), artist.getName()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
-
-    @Override
-    public ArtistResponseDTO findByName(String name) {
-        return null;
-    }
-
-
-    /********Admin********/
 
 
     @Override
