@@ -10,6 +10,7 @@ public interface ArtistServiceInterface {
 
     List<ArtistResponseDTO> findAll();
     ArtistResponseDTO findById(Long id);
+    ArtistResponseDTO findByName(String name);
 
     ArtistResponseDTO addArtist(ArtistRequestDTO rq);
     ArtistResponseDTO updateArtist(Long id, ArtistRequestDTO rq);

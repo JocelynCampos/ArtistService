@@ -25,6 +25,9 @@ public class ArtistService implements ArtistServiceInterface {
         this.artistRepository = artistRepository;
     }
 
+    /******Customer*******/
+    //Empty here for now :)
+
 
     /********Common******/
 
@@ -53,12 +56,10 @@ public class ArtistService implements ArtistServiceInterface {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    /******Customer*******/
-
-
-
-
-
+    @Override
+    public ArtistResponseDTO findByName(String name) {
+        return null;
+    }
 
 
     /********Admin********/
@@ -70,7 +71,7 @@ public class ArtistService implements ArtistServiceInterface {
         if (name.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name cannot be empty");
         }
-        if (artistRepository.existsByName(name)) {
+        if (artistRepository.existsByNameIgnoreCase(name)) {
             throw new DuplicateArtistException("Artist with name " + name + " already exists");
         }
         var artist = new Artist();
@@ -91,7 +92,7 @@ public class ArtistService implements ArtistServiceInterface {
         }
         var name = raw.trim();
 
-        if (!name.equals(artist.getName()) && artistRepository.existsByName(name)) {
+        if (!name.equals(artist.getName()) && artistRepository.existsByNameIgnoreCase(name)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Artist with name " + name + " already exist.");
         }
 

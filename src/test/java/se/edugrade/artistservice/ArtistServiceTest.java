@@ -25,14 +25,14 @@ class ArtistServiceTest {
 
     @Test
     void addArtist_throwsDuplicate_IfNameAlreadyExists() throws Exception {
-        when(repo.existsByName("Adele")).thenReturn(true);
+        when(repo.existsByNameIgnoreCase("Adele")).thenReturn(true);
         assertThrows(DuplicateArtistException.class, () -> service.addArtist(new ArtistRequestDTO("Adele")));
         verify(repo, never()).save(any());
     }
 
     @Test
     void removeArtist_IfNameAlreadyExcised() throws Exception {
-        when(repo.existsByName("Adele")).thenReturn(false);
+        when(repo.existsByNameIgnoreCase("Adele")).thenReturn(false);
         assertThrows(DuplicateArtistException.class, () -> service.deleteArtist(1L));
         verify(repo, never()).save(any());
     }
