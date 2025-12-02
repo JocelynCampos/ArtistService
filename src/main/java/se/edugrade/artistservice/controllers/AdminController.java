@@ -6,7 +6,6 @@ import se.edugrade.artistservice.dto.ArtistRequestDTO;
 import se.edugrade.artistservice.dto.ArtistResponseDTO;
 import se.edugrade.artistservice.services.ArtistService;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/edufy/v1/artist")
